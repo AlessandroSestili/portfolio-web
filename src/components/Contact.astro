@@ -1,0 +1,256 @@
+---
+const socials = [
+  {
+    label: 'LinkedIn',
+    handle: 'linkedin.com/in/alessandro-sestili-59329b171/',
+    href: 'https://www.linkedin.com/in/alessandro-sestili-59329b171/',
+    color: '#0A66C2',
+    glow: 'rgba(10,102,194,0.35)',
+    icon: `<svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>`,
+  },
+  {
+    label: 'Email',
+    handle: 'sestilialessandro@gmail.com',
+    href: 'mailto:sestilialessandro@gmail.com',
+    color: '#7C3AED',
+    glow: 'rgba(124,58,237,0.35)',
+    icon: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
+  },
+];
+---
+
+<section id="contact" class="relative py-32 px-6 overflow-hidden">
+  <!-- Separator -->
+  <div class="max-w-6xl mx-auto mb-16">
+    <div class="h-px w-full" style="background:linear-gradient(to right,transparent,rgba(245,158,11,0.4),transparent);"></div>
+  </div>
+
+  <!-- Orb -->
+  <div
+    class="orb absolute animate-float-med"
+    style="width:500px;height:500px;bottom:-100px;left:-150px;
+           background:radial-gradient(circle,rgba(124,58,237,0.1) 0%,transparent 65%);pointer-events:none;"
+  ></div>
+
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <div class="reveal text-center mb-16">
+      <span class="section-badge mb-4 inline-flex">// get_in_touch</span>
+      <h2 class="text-4xl sm:text-5xl font-black text-white mt-4">
+        Lavoriamo <span class="text-gradient">insieme</span>
+      </h2>
+      <p class="text-white/40 mt-4 max-w-xl mx-auto text-sm">
+        Hai un progetto in mente? Sono disponibile per freelance, consulenze e posizioni full-time.
+      </p>
+    </div>
+
+    <!-- Two columns -->
+    <div class="grid lg:grid-cols-2 gap-12 items-start">
+
+      <!-- LEFT — Form -->
+      <div class="reveal-left">
+        <div class="gradient-border rounded-2xl p-7 sm:p-9">
+          <form id="contact-form" class="space-y-5" novalidate>
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-mono text-white/40 mb-2 ml-1" for="name">
+                  nome
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Mario Rossi"
+                  class="input-field"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-white/40 mb-2 ml-1" for="email">
+                  email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="mario@esempio.it"
+                  class="input-field"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono text-white/40 mb-2 ml-1" for="subject">
+                oggetto
+              </label>
+              <input
+                id="subject"
+                name="subject"
+                type="text"
+                placeholder="Proposta di collaborazione"
+                class="input-field"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-mono text-white/40 mb-2 ml-1" for="message">
+                messaggio
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                placeholder="Descrivi brevemente il tuo progetto..."
+                class="input-field resize-none"
+                required
+              ></textarea>
+            </div>
+
+            <!-- Submit -->
+            <button
+              type="submit"
+              id="submit-btn"
+              class="btn-primary w-full justify-center text-sm py-3"
+            >
+              <span id="submit-label">
+                Invia messaggio
+                <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+              </span>
+              <span id="submit-success" class="hidden items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Messaggio inviato!
+              </span>
+            </button>
+
+            <p class="text-center text-xs text-white/25 font-mono">
+              Oppure scrivimi direttamente a{' '}
+              <a href="mailto:sestilialessandro@gmail.com" class="text-violet-400 hover:text-violet-300 transition-colors">
+                sestilialessandro@gmail.com
+              </a>
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <!-- RIGHT — Info + socials -->
+      <div class="reveal-right space-y-8">
+
+        <!-- Quick info -->
+        <div class="space-y-5">
+          <div class="glass rounded-xl p-5 flex items-start gap-4 glass-hover">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                 style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25);">
+              <svg class="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white mb-0.5">Risposta rapida</p>
+              <p class="text-xs text-white/40">Di solito rispondo entro 24 ore nei giorni lavorativi.</p>
+            </div>
+          </div>
+
+          <div class="glass rounded-xl p-5 flex items-start gap-4 glass-hover">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                 style="background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.25);">
+              <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white mb-0.5">Open to work</p>
+              <p class="text-xs text-white/40">Disponibile per freelance, part-time e posizioni full-time remote.</p>
+            </div>
+          </div>
+
+          <div class="glass rounded-xl p-5 flex items-start gap-4 glass-hover">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                 style="background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.25);">
+              <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white mb-0.5">Italia / Remote</p>
+              <p class="text-xs text-white/40">Lavoro da remoto con team di tutto il mondo.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social links -->
+        <div>
+          <p class="font-mono text-xs text-white/30 uppercase tracking-widest mb-4">— Contatti diretti</p>
+          <div class="space-y-3">
+            {socials.map(s => (
+              <a
+                href={s.href}
+                target={s.href.startsWith('http') ? '_blank' : undefined}
+                rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                class="flex items-center gap-4 glass glass-hover rounded-xl p-4 group"
+                style={`--glow:${s.glow};`}
+              >
+                <div
+                  class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110"
+                  style={`background:${s.color}20;border:1px solid ${s.color}35;color:${s.color};`}
+                >
+                  <Fragment set:html={s.icon} />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-white">{s.label}</p>
+                  <p class="text-xs text-white/40 truncate font-mono">{s.handle}</p>
+                </div>
+                <svg class="w-4 h-4 text-white/20 group-hover:text-white/60 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form    = document.getElementById('contact-form') as HTMLFormElement | null;
+  const btn     = document.getElementById('submit-btn')   as HTMLButtonElement | null;
+  const label   = document.getElementById('submit-label');
+  const success = document.getElementById('submit-success');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data  = new FormData(form);
+    const name    = data.get('name')    as string;
+    const email   = data.get('email')   as string;
+    const subject = data.get('subject') as string;
+    const message = data.get('message') as string;
+
+    if (!name || !email || !message) return;
+
+    // Open mailto with form data
+    const mailtoLink = `mailto:sestilialessandro@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio Contact')}&body=${encodeURIComponent(`Nome: ${name}\nEmail: ${email}\n\n${message}`)}`;
+    window.location.href = mailtoLink;
+
+    // Show success state briefly
+    if (btn && label && success) {
+      btn.disabled = true;
+      label.classList.add('hidden');
+      success.classList.remove('hidden');
+      success.classList.add('flex');
+      setTimeout(() => {
+        btn.disabled = false;
+        label.classList.remove('hidden');
+        success.classList.add('hidden');
+        success.classList.remove('flex');
+        form.reset();
+      }, 3000);
+    }
+  });
+</script>
