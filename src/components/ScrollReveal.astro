@@ -1,0 +1,36 @@
+---
+/**
+ * Optional typed wrapper around the scroll reveal CSS classes.
+ * Compiles to a plain HTML element — zero runtime cost.
+ *
+ * The class API (.reveal, .reveal-left, .reveal-right, .reveal-delay-N)
+ * remains valid for existing markup and direct use.
+ */
+interface Props {
+  direction?: 'up' | 'left' | 'right';
+  delay?: 1 | 2 | 3 | 4 | 5 | 6;
+  tag?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  direction = 'up',
+  delay,
+  tag: Tag = 'div',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const revealClass =
+  direction === 'left' ? 'reveal-left'
+  : direction === 'right' ? 'reveal-right'
+  : 'reveal';
+---
+
+<Tag
+  class:list={[revealClass, delay && `reveal-delay-${delay}`, className]}
+  {...rest}
+>
+  <slot />
+</Tag>
