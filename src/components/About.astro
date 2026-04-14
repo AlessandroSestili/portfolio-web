@@ -99,32 +99,132 @@
         <!-- CTA row -->
         <div class="flex flex-wrap gap-3 pt-2">
           <a href="#contact" class="btn-primary">Parliamo insieme</a>
-          <a
-            href="/cv-classic.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-secondary"
-          >
+          <button onclick="openCvModal('/cv-classic.pdf', 'CV_Alessandro_Sestili_Classic.pdf')" class="btn-secondary">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
             CV Classic
-          </a>
-          <a
-            href="/cv-skills.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-secondary"
-          >
+          </button>
+          <button onclick="openCvModal('/cv-skills.pdf', 'CV_Alessandro_Sestili_Skills.pdf')" class="btn-secondary">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
             CV Skills
-          </a>
+          </button>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- CV Modal -->
+<div id="cv-modal" class="cv-modal-overlay" onclick="closeCvModal(event)">
+  <div class="cv-modal-box">
+    <div class="cv-modal-header">
+      <span id="cv-modal-title" class="font-mono text-sm text-white/60"></span>
+      <div class="flex items-center gap-3">
+        <a id="cv-download-btn" href="#" download class="btn-secondary" style="padding:.4rem .9rem;font-size:.8rem;">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          Scarica
+        </a>
+        <button onclick="closeCvModal()" class="cv-close-btn" aria-label="Chiudi">✕</button>
+      </div>
+    </div>
+    <iframe id="cv-iframe" src="" class="cv-iframe"></iframe>
+  </div>
+</div>
+
+<style>
+  .cv-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .cv-modal-overlay.open {
+    display: flex;
+  }
+  .cv-modal-box {
+    background: rgba(8,8,20,0.97);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 860px;
+    height: 90vh;
+    box-shadow: 0 25px 80px rgba(0,0,0,.6);
+  }
+  .cv-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    background: rgba(255,255,255,.02);
+    flex-shrink: 0;
+  }
+  .cv-close-btn {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    color: #fff;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: .85rem;
+    transition: background .2s;
+  }
+  .cv-close-btn:hover { background: rgba(255,255,255,.14); }
+  .cv-iframe {
+    flex: 1;
+    width: 100%;
+    border: none;
+  }
+</style>
+
+<script>
+  function openCvModal(src, filename) {
+    const modal = document.getElementById('cv-modal');
+    document.getElementById('cv-iframe').src = src;
+    document.getElementById('cv-modal-title').textContent = filename;
+    document.getElementById('cv-download-btn').href = src;
+    document.getElementById('cv-download-btn').download = filename;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCvModal(e) {
+    if (e && e.target !== document.getElementById('cv-modal')) return;
+    _closeCvModal();
+  }
+
+  function _closeCvModal() {
+    const modal = document.getElementById('cv-modal');
+    modal.classList.remove('open');
+    document.getElementById('cv-iframe').src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') _closeCvModal();
+  });
+
+  // expose to inline onclick
+  window.openCvModal = openCvModal;
+  window.closeCvModal = closeCvModal;
+</script>
