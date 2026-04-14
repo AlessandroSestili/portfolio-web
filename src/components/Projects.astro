@@ -15,6 +15,8 @@ type Project = {
   mockupStyle: string;
 };
 
+const VISIBLE_LIMIT = 4;
+
 const projects: Project[] = [
   {
     id: 1,
@@ -83,23 +85,6 @@ const projects: Project[] = [
     mockupStyle:
       'background:linear-gradient(135deg,rgba(232,121,249,0.18) 0%,rgba(124,58,237,0.1) 100%)',
   },
-  {
-    id: 5,
-    title: 'Vue Design System',
-    subtitle: 'Scalable component library',
-    description:
-      'Design system scalabile con oltre 50 componenti documentati, varianti tematiche e integrazione Storybook. Pubblicato come pacchetto npm.',
-    tags: ['Vue 3', 'TypeScript', 'Storybook', 'SCSS', 'Vite'],
-    category: 'Design System',
-    accentColor: '#F59E0B',
-    glowColor: 'rgba(245,158,11,0.3)',
-    status: 'Open Source',
-    featured: false,
-    demoUrl: '#',
-    codeUrl: '#',
-    mockupStyle:
-      'background:linear-gradient(135deg,rgba(245,158,11,0.2) 0%,rgba(124,58,237,0.08) 100%)',
-  },
 ];
 
 const statusColors: Record<string, string> = {
@@ -109,6 +94,8 @@ const statusColors: Record<string, string> = {
 };
 
 const categories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
+const nonFeatured = projects.filter(p => !p.featured);
+const hiddenCount = Math.max(0, nonFeatured.length - VISIBLE_LIMIT);
 ---
 
 <section id="projects" class="relative py-32 px-6 overflow-hidden">
@@ -138,7 +125,7 @@ const categories = ['All', ...Array.from(new Set(projects.map(p => p.category)))
           class={`filter-btn font-mono text-xs px-4 py-2 rounded-full border transition-all duration-200 ${cat === 'All' ? 'filter-active' : ''}`}
         >
           {cat}
-          <span class="filter-count ml-1.5 opacity-50">
+          <span class="ml-1.5 opacity-50">
             {cat === 'All' ? projects.length : projects.filter(p => p.category === cat).length}
           </span>
         </button>
@@ -148,125 +135,148 @@ const categories = ['All', ...Array.from(new Set(projects.map(p => p.category)))
     <!-- Projects grid -->
     <div class="projects-grid" id="projects-grid">
 
-      {projects.map((p) => (
-        <div
-          class={`project-card reveal card-tilt ${p.featured ? 'project-featured' : ''}`}
-          data-category={p.category}
-        >
-          {p.featured ? (
-            /* ── Featured card (full-width) ── */
-            <div class="gradient-border rounded-2xl overflow-hidden h-full" style={`--accent:${p.accentColor};`}>
-              <div class="grid lg:grid-cols-2 gap-0 min-h-[420px]">
-                <!-- Mockup panel -->
-                <div class="relative flex items-center justify-center p-10 min-h-[260px] lg:min-h-auto" style={p.mockupStyle}>
-                  <div class="w-full max-w-sm glass rounded-xl overflow-hidden shadow-2xl" style={`box-shadow:0 20px 60px ${p.glowColor};`}>
-                    <div class="px-3 py-2 flex items-center gap-1.5 border-b border-white/5" style="background:rgba(255,255,255,0.03);">
-                      <span class="w-2.5 h-2.5 rounded-full bg-red-400/70"></span>
-                      <span class="w-2.5 h-2.5 rounded-full bg-yellow-400/70"></span>
-                      <span class="w-2.5 h-2.5 rounded-full bg-green-400/70"></span>
-                      <span class="flex-1 ml-2 h-4 rounded bg-white/5 text-[9px] font-mono text-white/25 flex items-center px-2">ui-playground.dev</span>
+      {/* Featured card — full width */}
+      {projects.filter(p => p.featured).map(p => (
+        <div class="project-card project-featured reveal card-tilt" data-category={p.category}>
+          <div class="gradient-border rounded-2xl overflow-hidden" style={`--accent:${p.accentColor};`}>
+            <div class="grid lg:grid-cols-2 gap-0" style="min-height:420px;">
+
+              <!-- Mockup panel -->
+              <div class="relative flex items-center justify-center p-10" style={`${p.mockupStyle};min-height:260px;`}>
+                <div
+                  class="w-full glass rounded-xl overflow-hidden"
+                  style={`max-width:320px;box-shadow:0 20px 60px ${p.glowColor};`}
+                >
+                  <!-- Browser chrome -->
+                  <div class="px-3 py-2 flex items-center gap-1.5 border-b border-white/5" style="background:rgba(255,255,255,0.03);">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-400/70"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-400/70"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-400/70"></span>
+                    <span class="flex-1 ml-2 h-4 rounded bg-white/5 text-[9px] font-mono text-white/25 flex items-center px-2">ui-playground.dev</span>
+                  </div>
+                  <!-- Mock content -->
+                  <div class="p-4 space-y-3">
+                    <div class="flex gap-2">
+                      <div class="h-8 w-16 rounded-lg" style={`background:${p.accentColor}40;border:1px solid ${p.accentColor}50;`}></div>
+                      <div class="h-8 flex-1 rounded-lg bg-white/5"></div>
                     </div>
-                    <div class="p-4 space-y-3">
-                      <div class="flex gap-2">
-                        <div class="h-8 w-16 rounded-lg" style={`background:${p.accentColor}40;border:1px solid ${p.accentColor}50;`}></div>
-                        <div class="h-8 flex-1 rounded-lg bg-white/5"></div>
-                      </div>
-                      <div class="grid grid-cols-3 gap-2">
-                        {[p.accentColor, '#06B6D4', '#F59E0B'].map(c => (
-                          <div class="h-16 rounded-lg animate-pulse-slow" style={`background:${c}20;border:1px solid ${c}30;`}></div>
-                        ))}
-                      </div>
-                      <div class="space-y-1.5">
-                        {[70, 90, 55].map(w => (
-                          <div class="h-2 rounded-full bg-white/5" style={`width:${w}%`}></div>
-                        ))}
-                      </div>
+                    <div class="grid grid-cols-3 gap-2">
+                      {[p.accentColor, '#06B6D4', '#F59E0B'].map(c => (
+                        <div class="h-16 rounded-lg animate-pulse-slow" style={`background:${c}20;border:1px solid ${c}30;`}></div>
+                      ))}
                     </div>
-                  </div>
-                </div>
-                <!-- Info panel -->
-                <div class="flex flex-col justify-center p-8 lg:p-12">
-                  <div class="flex items-center gap-3 mb-4">
-                    <span class={`text-xs font-mono font-semibold px-2.5 py-1 rounded-full border ${statusColors[p.status]}`}>
-                      {p.status === 'Live' && '● '}{p.status}
-                    </span>
-                    <span class="text-xs text-white/25 font-mono">Featured</span>
-                  </div>
-                  <h3 class="text-3xl sm:text-4xl font-black text-white mb-2">{p.title}</h3>
-                  <p class="font-mono text-sm mb-4" style={`color:${p.accentColor};`}>{p.subtitle}</p>
-                  <p class="text-white/55 text-sm leading-relaxed mb-6">{p.description}</p>
-                  <div class="flex flex-wrap gap-2 mb-8">
-                    {p.tags.map(tag => (
-                      <span class="text-xs font-mono px-2.5 py-1 rounded-full glass" style={`border-color:${p.accentColor}30;color:${p.accentColor}cc;`}>{tag}</span>
-                    ))}
-                  </div>
-                  <div class="flex gap-3">
-                    {p.demoUrl && p.demoUrl !== '#' && (
-                      <a href={p.demoUrl} target="_blank" rel="noopener noreferrer" class="btn-primary text-sm py-2.5 px-5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                        Live Demo
-                      </a>
-                    )}
-                    {p.codeUrl && p.codeUrl !== '#' && (
-                      <a href={p.codeUrl} target="_blank" rel="noopener noreferrer" class="btn-secondary text-sm py-2.5 px-5">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-                        Codice
-                      </a>
-                    )}
+                    <div class="space-y-1.5">
+                      {[70, 90, 55].map(w => (
+                        <div class="h-2 rounded-full bg-white/5" style={`width:${w}%`}></div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            /* ── Regular card ── */
-            <div class="glass glass-hover rounded-2xl overflow-hidden h-full flex flex-col" style={`border-color:${p.accentColor}20;`}>
-              <div class="h-44 relative flex items-center justify-center p-6" style={p.mockupStyle}>
-                <div class="grid grid-cols-3 gap-2 w-full max-w-[200px]">
-                  {[p.accentColor, '#fff', '#06B6D4'].map(c => (
-                    <div class="h-10 rounded-lg animate-pulse-slow" style={`background:${c}25;border:1px solid ${c}30;`}></div>
-                  ))}
-                  <div class="h-10 col-span-2 rounded-lg animate-pulse-slow" style={`background:${p.accentColor}15;border:1px solid ${p.accentColor}25;`}></div>
-                  <div class="h-10 rounded-lg" style="background:rgba(255,255,255,0.04);"></div>
+
+              <!-- Info panel -->
+              <div class="flex flex-col justify-center p-8 lg:p-12">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class={`text-xs font-mono font-semibold px-2.5 py-1 rounded-full border ${statusColors[p.status]}`}>
+                    {p.status === 'Live' && '● '}{p.status}
+                  </span>
+                  <span class="text-xs text-white/25 font-mono">Featured</span>
                 </div>
-              </div>
-              <div class="flex flex-col flex-1 p-6">
-                <div class="flex items-center justify-between mb-3">
-                  <span class={`text-xs font-mono font-semibold px-2 py-0.5 rounded-full border ${statusColors[p.status]}`}>{p.status}</span>
-                  <span class="font-mono text-xs" style={`color:${p.accentColor};`}>{p.subtitle}</span>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">{p.title}</h3>
-                <p class="text-white/50 text-sm leading-relaxed mb-4 flex-1">{p.description}</p>
-                <div class="flex flex-wrap gap-1.5 mb-5">
-                  {p.tags.slice(0, 4).map(tag => (
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full" style={`background:${p.accentColor}15;color:${p.accentColor}bb;border:1px solid ${p.accentColor}25;`}>{tag}</span>
+                <h3 class="text-3xl sm:text-4xl font-black text-white mb-2">{p.title}</h3>
+                <p class="font-mono text-sm mb-4" style={`color:${p.accentColor};`}>{p.subtitle}</p>
+                <p class="text-white/55 text-sm leading-relaxed mb-6">{p.description}</p>
+                <div class="flex flex-wrap gap-2 mb-8">
+                  {p.tags.map(tag => (
+                    <span class="text-xs font-mono px-2.5 py-1 rounded-full glass" style={`border-color:${p.accentColor}30;color:${p.accentColor}cc;`}>{tag}</span>
                   ))}
                 </div>
-                <div class="flex gap-2">
+                <div class="flex gap-3">
                   {p.demoUrl && p.demoUrl !== '#' && (
-                    <a href={p.demoUrl} target="_blank" rel="noopener noreferrer" class="btn-primary text-xs py-2 px-4 flex-1 justify-center">Demo</a>
+                    <a href={p.demoUrl} target="_blank" rel="noopener noreferrer" class="btn-primary text-sm py-2.5 px-5">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                      Live Demo
+                    </a>
                   )}
                   {p.codeUrl && p.codeUrl !== '#' && (
-                    <a href={p.codeUrl} target="_blank" rel="noopener noreferrer" class={`btn-secondary text-xs py-2 px-4 ${(!p.demoUrl || p.demoUrl === '#') ? 'flex-1 justify-center' : ''}`}>
-                      <svg class="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-                      GitHub
+                    <a href={p.codeUrl} target="_blank" rel="noopener noreferrer" class="btn-secondary text-sm py-2.5 px-5">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                      Codice
                     </a>
                   )}
                 </div>
               </div>
+
             </div>
-          )}
+          </div>
         </div>
       ))}
 
-      <!-- Empty state -->
+      {/* Non-featured cards */}
+      {nonFeatured.map((p, i) => (
+        <div
+          class={`project-card reveal card-tilt ${i >= VISIBLE_LIMIT ? 'extra-card hidden-card' : ''}`}
+          data-category={p.category}
+          data-order={i}
+        >
+          <div class="glass glass-hover rounded-2xl overflow-hidden h-full flex flex-col" style={`border-color:${p.accentColor}20;`}>
+            <div class="h-44 relative flex items-center justify-center p-6" style={p.mockupStyle}>
+              <div class="grid grid-cols-3 gap-2 w-full max-w-[200px]">
+                {[p.accentColor, '#fff', '#06B6D4'].map(c => (
+                  <div class="h-10 rounded-lg animate-pulse-slow" style={`background:${c}25;border:1px solid ${c}30;`}></div>
+                ))}
+                <div class="h-10 col-span-2 rounded-lg animate-pulse-slow" style={`background:${p.accentColor}15;border:1px solid ${p.accentColor}25;`}></div>
+                <div class="h-10 rounded-lg" style="background:rgba(255,255,255,0.04);"></div>
+              </div>
+            </div>
+            <div class="flex flex-col flex-1 p-6">
+              <div class="flex items-center justify-between mb-3">
+                <span class={`text-xs font-mono font-semibold px-2 py-0.5 rounded-full border ${statusColors[p.status]}`}>{p.status}</span>
+                <span class="font-mono text-xs" style={`color:${p.accentColor};`}>{p.subtitle}</span>
+              </div>
+              <h3 class="text-xl font-bold text-white mb-2">{p.title}</h3>
+              <p class="text-white/50 text-sm leading-relaxed mb-4 flex-1">{p.description}</p>
+              <div class="flex flex-wrap gap-1.5 mb-5">
+                {p.tags.slice(0, 4).map(tag => (
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-full" style={`background:${p.accentColor}15;color:${p.accentColor}bb;border:1px solid ${p.accentColor}25;`}>{tag}</span>
+                ))}
+              </div>
+              <div class="flex gap-2">
+                {p.demoUrl && p.demoUrl !== '#' && (
+                  <a href={p.demoUrl} target="_blank" rel="noopener noreferrer" class="btn-primary text-xs py-2 px-4 flex-1 justify-center">Demo</a>
+                )}
+                {p.codeUrl && p.codeUrl !== '#' && (
+                  <a href={p.codeUrl} target="_blank" rel="noopener noreferrer" class={`btn-secondary text-xs py-2 px-4 ${(!p.demoUrl || p.demoUrl === '#') ? 'flex-1 justify-center' : ''}`}>
+                    <svg class="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      <!-- Empty state (shown when filter has no results) -->
       <div id="projects-empty" class="col-span-full hidden text-center py-16">
         <p class="text-white/30 font-mono text-sm">// no projects in this category yet</p>
       </div>
 
     </div>
 
-    <!-- See more -->
-    <div class="reveal mt-12 text-center">
+    <!-- Show more button -->
+    {hiddenCount > 0 && (
+      <div class="reveal mt-8 text-center" id="show-more-wrap">
+        <button id="show-more-btn" class="btn-secondary inline-flex items-center gap-2">
+          <span id="show-more-label">+ {hiddenCount} altri progetti</span>
+          <svg id="show-more-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+      </div>
+    )}
+
+    <!-- LinkedIn -->
+    <div class="reveal mt-8 text-center">
       <a
         href="https://www.linkedin.com/in/alessandro-sestili-59329b171/"
         target="_blank"
@@ -289,10 +299,7 @@ const categories = ['All', ...Array.from(new Set(projects.map(p => p.category)))
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
   }
-  .project-card {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  .project-card.project-featured {
+  .project-featured {
     grid-column: 1 / -1;
   }
   .project-card.hidden-card {
@@ -317,43 +324,84 @@ const categories = ['All', ...Array.from(new Set(projects.map(p => p.category)))
   }
 
   @media (max-width: 640px) {
-    .projects-grid {
-      grid-template-columns: 1fr;
-    }
-    .project-card.project-featured {
-      grid-column: 1;
-    }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-featured { grid-column: 1; }
   }
 </style>
 
-<script>
-  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
-  const cards = document.querySelectorAll<HTMLElement>('.project-card');
+<script define:vars={{ VISIBLE_LIMIT }}>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards      = document.querySelectorAll('.project-card');
   const emptyState = document.getElementById('projects-empty');
+  const showMoreWrap = document.getElementById('show-more-wrap');
+  const showMoreBtn  = document.getElementById('show-more-btn');
+  const showMoreLabel = document.getElementById('show-more-label');
+  const showMoreIcon  = document.getElementById('show-more-icon');
 
+  let expanded = false;
+  let activeFilter = 'All';
+
+  function applyState() {
+    let visible = 0;
+
+    cards.forEach(card => {
+      const cat      = card.dataset.category;
+      const order    = parseInt(card.dataset.order ?? '-1', 10);
+      const isExtra  = card.classList.contains('extra-card');
+      const featured = card.classList.contains('project-featured');
+
+      const matchesFilter = activeFilter === 'All' || cat === activeFilter;
+
+      // featured card: hide when filtered to another category
+      if (featured) {
+        card.classList.toggle('hidden-card', !matchesFilter);
+        if (matchesFilter) visible++;
+        return;
+      }
+
+      // non-featured: hide if filter mismatch OR beyond limit (only in All + collapsed)
+      const overLimit = activeFilter === 'All' && !expanded && order >= VISIBLE_LIMIT;
+      card.classList.toggle('hidden-card', !matchesFilter || overLimit);
+      if (matchesFilter && !overLimit) visible++;
+    });
+
+    emptyState?.classList.toggle('hidden', visible > 0);
+
+    // Show/hide "show more" button
+    if (showMoreWrap) {
+      const relevantExtra = [...cards].filter(c =>
+        c.classList.contains('extra-card') &&
+        (activeFilter === 'All' || c.dataset.category === activeFilter)
+      );
+      showMoreWrap.style.display = (activeFilter === 'All' && relevantExtra.length > 0) ? '' : 'none';
+
+      if (showMoreLabel) {
+        showMoreLabel.textContent = expanded
+          ? 'Mostra meno'
+          : `+ ${relevantExtra.length} altri progetti`;
+      }
+      if (showMoreIcon) {
+        showMoreIcon.style.transform = expanded ? 'rotate(180deg)' : '';
+      }
+    }
+  }
+
+  // Filter click
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const filter = btn.dataset.filter ?? 'All';
-
-      // Update active button
+      activeFilter = btn.dataset.filter ?? 'All';
+      expanded = false;
       filterBtns.forEach(b => b.classList.remove('filter-active'));
       btn.classList.add('filter-active');
-
-      // Show/hide cards
-      let visible = 0;
-      cards.forEach(card => {
-        const match = filter === 'All' || card.dataset.category === filter;
-        card.classList.toggle('hidden-card', !match);
-
-        // Featured card loses full-width when filtered
-        if (card.classList.contains('project-featured')) {
-          card.classList.toggle('project-featured', filter === 'All');
-        }
-
-        if (match) visible++;
-      });
-
-      emptyState?.classList.toggle('hidden', visible > 0);
+      applyState();
     });
   });
+
+  // Show more click
+  showMoreBtn?.addEventListener('click', () => {
+    expanded = !expanded;
+    applyState();
+  });
+
+  applyState();
 </script>
